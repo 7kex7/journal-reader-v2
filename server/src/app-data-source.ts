@@ -1,7 +1,7 @@
 import { DataSource } from "typeorm"
 import { User } from "./entity/user.entity"
 
-export const myDataSource = new DataSource({
+export const myDataSource: DataSource = new DataSource({
     type: "postgres",
     host: "localhost",
     port: 5432,
@@ -11,5 +11,5 @@ export const myDataSource = new DataSource({
     synchronize: true,
     entities: [
         User,
-    ],
+    ]
 })
