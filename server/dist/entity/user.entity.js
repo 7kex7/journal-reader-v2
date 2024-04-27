@@ -9,23 +9,47 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = void 0;
+exports.Users = exports.UserRole = void 0;
 const typeorm_1 = require("typeorm");
-let User = class User {
+const favorites_entity_1 = require("./favorites.entity");
+var UserRole;
+(function (UserRole) {
+    UserRole["ADMIN"] = "admin";
+    UserRole["USER"] = "user";
+    UserRole["GUEST"] = "guest";
+})(UserRole || (exports.UserRole = UserRole = {}));
+let Users = class Users {
 };
-exports.User = User;
+exports.Users = Users;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)({}),
-    __metadata("design:type", String)
-], User.prototype, "id", void 0);
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    __metadata("design:type", Number)
+], Users.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "varchar", length: 20, unique: false }),
+    (0, typeorm_1.Column)({ type: "enum", enum: UserRole,
+        default: UserRole.GUEST }),
     __metadata("design:type", String)
-], User.prototype, "firstName", void 0);
+], Users.prototype, "role", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "varchar", length: 20, unique: false }),
+    (0, typeorm_1.Column)({ type: "varchar", length: 40 }),
     __metadata("design:type", String)
-], User.prototype, "lastName", void 0);
-exports.User = User = __decorate([
+], Users.prototype, "username", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: "varchar", length: 40 }),
+    __metadata("design:type", String)
+], Users.prototype, "email", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: "varchar", length: 200 }),
+    __metadata("design:type", String)
+], Users.prototype, "password", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: "varchar", length: 200 }),
+    __metadata("design:type", String)
+], Users.prototype, "photo", void 0);
+__decorate([
+    (0, typeorm_1.OneToOne)(() => favorites_entity_1.Favorites, (favorites) => favorites.user, { onDelete: "CASCADE" }),
+    __metadata("design:type", favorites_entity_1.Favorites)
+], Users.prototype, "favorites", void 0);
+exports.Users = Users = __decorate([
     (0, typeorm_1.Entity)()
-], User);
+], Users);

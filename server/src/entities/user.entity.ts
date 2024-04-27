@@ -1,4 +1,9 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm"
+import { Entity,
+     Column,
+     PrimaryGeneratedColumn,
+     OneToOne
+ } from "typeorm"
+import { Favorites } from "./favorites.entity"
 
 export enum UserRole {
     ADMIN = "admin",
@@ -7,11 +12,12 @@ export enum UserRole {
 }
 
 @Entity()
-export class User {
+export class Users {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column({type: "enum", enum: UserRole, default: UserRole.GUEST})
+    @Column({type: "enum", enum: UserRole
+                , default: UserRole.GUEST})
     role: UserRole
 
     @Column({type: "varchar", length: 40})
@@ -26,5 +32,7 @@ export class User {
     @Column({type: "varchar", length: 200})
     photo: string
 
-    // @OneToOne(() => )
+    @OneToOne(() => Favorites, (favorites) => favorites.user
+                , {onDelete: "CASCADE"})
+    favorites: Favorites
 }

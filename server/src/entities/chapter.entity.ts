@@ -1,7 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm"
+import { Journals } from "./journal.entity"
 
 @Entity()
-export class Chapter {
+export class Chapters {
     @PrimaryGeneratedColumn()
     id: number
 
@@ -16,4 +17,8 @@ export class Chapter {
 
     @Column({type: "int"})
     year: number
+
+    @ManyToOne(() => Journals, (journal) => journal.chapters)  
+    @JoinColumn()
+    journal: Journals;
 }
