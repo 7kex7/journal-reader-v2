@@ -1,17 +1,15 @@
-import express, { Express, NextFunction, Request, Response } from "express";
-import { myDataSource } from "../app-data-source";
-import { Users } from "../entities/user.entity";
+import express, { Express } from "express";
+import UserController from "../controllers/userController";
+import { authMiddleware, ICustomRequest } from "../middlewares/authMiddleware"
+
 const userRouter: Express = express();
 
-userRouter.get("/", async function (req: Request, res: Response) {
-    const users: Users[] = await myDataSource.getRepository(Users).find()
-    res.json(users)
-})
+userRouter.get("/:id", UserController.findOne)
+userRouter.get('/check', authMiddleware, async (req, res, next) => {
+    await UserController.check(req as ICustomRequest, res, next);
+});
 
-userRouter.post("/", async function (req: Request, res: Response) {
-    const user = await myDataSource.getRepository(Users).create(req.body)
-    const results = await myDataSource.getRepository(Users).save(user)
-    return res.send(results)
-})
+userRouter.post("/registration", UserController.registration)
+userRouter.post("/login", UserController.login)
 
 export default userRouter;

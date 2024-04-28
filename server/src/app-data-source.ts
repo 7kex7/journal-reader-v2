@@ -6,12 +6,12 @@ import { Authors } from "./entities/author.entity"
 import { Genres } from "./entities/genre.entity"
 import { Journals } from "./entities/journal.entity"
 
-export const myDataSource: DataSource = new DataSource({
+export const dataSource: DataSource = new DataSource({
     type: "postgres",
     host: "localhost",
     port: 5432,
     username: "postgres",
-    database: "journals",
+    database: "journals_db",
     password: "1234",
     synchronize: true,
     entities: [

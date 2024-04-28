@@ -9,7 +9,7 @@ export enum JournalStatus {
 @Entity()
 export class Authors {
     @PrimaryGeneratedColumn()
-    id: number
+    id: string
 
     @Column({type: "varchar", length: 40})
     name: string

@@ -1,24 +1,17 @@
 import { Entity,
-     Column,
-     PrimaryGeneratedColumn,
-     OneToOne
- } from "typeorm"
+        Column,
+        PrimaryGeneratedColumn,
+        OneToOne
+    } from "typeorm"
 import { Favorites } from "./favorites.entity"
-
-export enum UserRole {
-    ADMIN = "admin",
-    USER = "user",
-    GUEST = "guest"
-}
 
 @Entity()
 export class Users {
     @PrimaryGeneratedColumn()
-    id: number
+    id: string
 
-    @Column({type: "enum", enum: UserRole
-                , default: UserRole.GUEST})
-    role: UserRole
+    @Column({type: "bool", default: false})
+    is_admin: boolean
 
     @Column({type: "varchar", length: 40})
     username: string
@@ -29,7 +22,7 @@ export class Users {
     @Column({type: "varchar", length: 200})
     password: string
 
-    @Column({type: "varchar", length: 200})
+    @Column({type: "varchar", length: 200, default: "default"})
     photo: string
 
     @OneToOne(() => Favorites, (favorites) => favorites.user

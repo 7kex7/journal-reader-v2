@@ -20,12 +20,13 @@ const app = (0, express_1.default)();
 dotenv_1.default.config();
 const port = process.env.PORT || 5001;
 app.use(express_1.default.json());
+app.use(express_1.default.text());
 app.use(express_1.default.static('static'));
 app.use('/api', router_1.default);
 function start() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            app_data_source_1.myDataSource
+            app_data_source_1.dataSource
                 .initialize()
                 .then(() => {
                 console.log("Data Source has been initialized!");

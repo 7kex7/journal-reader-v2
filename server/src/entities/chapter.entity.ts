@@ -1,10 +1,15 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm"
+import { Entity,
+        Column,
+        PrimaryGeneratedColumn,
+        ManyToOne,
+        JoinColumn
+    } from "typeorm"
 import { Journals } from "./journal.entity"
 
 @Entity()
 export class Chapters {
     @PrimaryGeneratedColumn()
-    id: number
+    id: string
 
     @Column({type: "varchar", length: 50})
     name: string

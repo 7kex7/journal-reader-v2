@@ -11,7 +11,7 @@ import { Journals } from "./journal.entity"
 @Entity()
 export class Favorites {
     @PrimaryGeneratedColumn()
-    id: number
+    id: string
 
     @OneToOne(() => Users, (users) => users.favorites)
     @JoinColumn()
@@ -24,7 +24,7 @@ export class Favorites {
 @Entity()
 export class FavoriteJournals {
     @PrimaryGeneratedColumn()
-    id: number
+    id: string
     
     @ManyToOne(() => Favorites, (favorites) => favorites.favoriteJournal)
     @JoinColumn()

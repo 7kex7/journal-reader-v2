@@ -9,7 +9,7 @@ import { Journals } from "./journal.entity"
 @Entity()
 export class Genres {
     @PrimaryGeneratedColumn()
-    id: number
+    id: string
 
     @Column({type: "varchar", length: 20})
     name: string

@@ -1,19 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.myDataSource = void 0;
+exports.dataSource = void 0;
 const typeorm_1 = require("typeorm");
-const user_entity_1 = require("./entity/user.entity");
-const favorites_entity_1 = require("./entity/favorites.entity");
-const chapter_entity_1 = require("./entity/chapter.entity");
-const author_entity_1 = require("./entity/author.entity");
-const genre_entity_1 = require("./entity/genre.entity");
-const journal_entity_1 = require("./entity/journal.entity");
-exports.myDataSource = new typeorm_1.DataSource({
+const user_entity_1 = require("./entities/user.entity");
+const favorites_entity_1 = require("./entities/favorites.entity");
+const chapter_entity_1 = require("./entities/chapter.entity");
+const author_entity_1 = require("./entities/author.entity");
+const genre_entity_1 = require("./entities/genre.entity");
+const journal_entity_1 = require("./entities/journal.entity");
+exports.dataSource = new typeorm_1.DataSource({
     type: "postgres",
     host: "localhost",
     port: 5432,
     username: "postgres",
-    database: "journals",
+    database: "journals_db",
     password: "1234",
     synchronize: true,
     entities: [
