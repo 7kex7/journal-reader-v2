@@ -2,23 +2,18 @@ import { Entity,
         Column,
         PrimaryGeneratedColumn,
         OneToMany,
-        ManyToOne,
         JoinColumn,
         CreateDateColumn,
         UpdateDateColumn,
         OneToOne, 
-        ManyToMany
+        ManyToMany,
+        JoinTable
     } from "typeorm"
 import { Chapters } from "./chapter.entity"
 import { Authors } from "./author.entity"
 import { FavoriteJournals } from "./favorites.entity"
 import { Genres } from "./genre.entity"
 
-export enum JournalStatus {
-    NONE = "-",
-    IN_WORK = "in work",
-    FINISHED = "finished"
-}
 
 @Entity()
 export class Journals {
@@ -28,16 +23,13 @@ export class Journals {
     @Column({type: "varchar", length: 40})
     title: string
 
-    @Column({type: "varchar", length: 40, default: "default"})
-    cover: string
-
     @Column({type: "int"})
-    year: string
+    year: number
 
     @Column({type: "text"})
     description: string
 
-    @Column({type: "enum", enum: JournalStatus, default: JournalStatus.NONE})
+    @Column({type: "varchar", length: 40})
     status: string
 
     @CreateDateColumn()
@@ -46,12 +38,12 @@ export class Journals {
     @UpdateDateColumn()
     updatedAt: Date
 
-    @ManyToOne(() => Genres, (genre) => genre.journals)
-    @JoinColumn()
-    genre: Genres
+    @ManyToMany(() => Genres)
+    @JoinTable()
+    genres: Genres[]
 
     @ManyToMany(() => Authors)
-    @JoinColumn()
+    @JoinTable()
     authors: Authors[];
 
     @OneToMany(() => Chapters, (chapter) => chapter.journal, {

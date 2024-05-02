@@ -11,7 +11,7 @@ export const dataSource: DataSource = new DataSource({
     host: "localhost",
     port: 5432,
     username: "postgres",
-    database: "journals_db",
+    database: "journal_db",
     password: "1234",
     synchronize: true,
     entities: [

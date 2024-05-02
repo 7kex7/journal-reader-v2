@@ -5,23 +5,25 @@ export interface ICustomRequest extends Request {
     user: string | JwtPayload;
 }
 
-export async function authMiddleware(req: Request, res: Response, next: NextFunction) {
+export const auth = (req: Request, res: Response, next: NextFunction) => {
     if (req.method === 'OPTIONS') next()
     try {
-        const token = req.header('authorization')?.replace('Bearer ', '')
-        if (!token) throw new Error('не авторизован')
+        const token: string | undefined = req.header('authorization')?.replace('Bearer ', '')
+        if (!token) { res.status(401).json({message: 'не авторизован'}) }
+        else {
+            const secretKey = process.env.SECRET_KEY as string | undefined
+            if (!secretKey) {
+                throw new Error('SECRET_KEY не найден')
+            }
+            const decoded: string | JwtPayload = jwt.verify(token, secretKey as Secret);
 
-        const secretKey = process.env.SECRET_KEY as string | undefined
-        if (!secretKey) {
-            throw new Error('Secret key is not defined')
+            (req as ICustomRequest).user = decoded
+            next()
         }
-        const decoded = jwt.verify(token, secretKey as Secret);
 
-        (req as ICustomRequest).user = decoded
-        next()
     } catch (error: unknown) {
         if (error instanceof Error) {
-            res.json({message: error.message})
+            res.json({message: 'auth middleware: ' + error.message})
         } else if (typeof error === 'string') {
             res.json({ message: error })
         }

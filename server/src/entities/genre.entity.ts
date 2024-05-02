@@ -13,7 +13,4 @@ export class Genres {
 
     @Column({type: "varchar", length: 20})
     name: string
-
-    @OneToMany(() => Journals, (journal) => journal.genre)
-    journals: Journals[]
 }

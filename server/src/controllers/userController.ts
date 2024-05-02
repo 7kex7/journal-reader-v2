@@ -4,11 +4,11 @@ import jwt from 'jsonwebtoken';
 
 import { Users } from "../entities/user.entity";
 import { dataSource } from "../app-data-source";
-import processCatchError from "../errors/processCatchError"
+import processApiError from "../error/processApiError"
 import { ICustomRequest } from "../middlewares/authMiddleware";
 
 
-async function createToken(id: string, name: string, email: string, is_admin: boolean) {
+async function createToken(id: string, name: string, email: string, is_admin: boolean): Promise<string> {
     const secretKey = process.env.SECRET_KEY as string | undefined;
     if (!secretKey) {
         throw new Error('Secret key is not defined');
@@ -21,7 +21,7 @@ async function createToken(id: string, name: string, email: string, is_admin: bo
             is_admin
         },
         secretKey,
-        {expiresIn: '24h'}
+        {expiresIn: '2 days'}
     )
 }
 
@@ -37,10 +37,33 @@ interface IJwtPayload {
     name: string;
     email: string;
     is_admin: boolean;
-}
-  
+} 
 
-class UserController {
+class userController {
+    async registration(req: Request, res: Response, next: NextFunction) : Promise<void> {
+        try {
+            const {username, email, password } = req.body;
+            if (!username || !email || !password) throw new Error('Нужно заполнить все поля')
+
+            const is_admin: boolean = req.body.is_admin || false
+
+            const is_exist = await dataSource.getRepository(Users).findOne({where: {email}})
+            if (is_exist) throw new Error('Пользователь с таким email уже существует')
+
+            const hashPassword: string = await bcrypt.hash(password, 5)
+
+            const userObj: IUserEntity = {username, email, password: hashPassword, is_admin}
+            const user: Users = await dataSource.getRepository(Users).create(userObj)
+            await dataSource.getRepository(Users).save(user)
+
+            const token: string = await createToken(user.id, user.username, user.email, user.is_admin)
+            res.json(token)
+
+        } catch (error: unknown) {
+            processApiError(404, error, next)
+        }
+    }
+
     async login(req: Request, res: Response, next: NextFunction) : Promise<void> {
         try {
             // получение данных
@@ -59,34 +82,11 @@ class UserController {
             res.json(token)
 
         } catch (error: unknown) {
-            processCatchError(error, next)
+            processApiError(404, error, next)
         }
     }
 
-    async registration(req: Request, res: Response, next: NextFunction) : Promise<void> {
-        try {
-            const {username, email, password } = req.body; 
-            if (!username || !email || !password) throw new Error('Нужно заполнить все поля')
-
-            const is_admin: boolean = req.body.role || false
-                
-            const is_exist = await dataSource.getRepository(Users).findOne({where: {email}})
-            if (is_exist) throw new Error('Пользователь с таким email уже существует')
-
-            const hashPassword: string = await bcrypt.hash(password, 5)
-
-            const userObj: IUserEntity = {username, email, password: hashPassword, is_admin}
-            const user: Users = await dataSource.getRepository(Users).create(userObj)
-            await dataSource.getRepository(Users).save(user)
-
-            const token = await createToken(user.id, user.username, user.email, user.is_admin)
-            res.json(token)
-
-        } catch (error: unknown) {
-            processCatchError(error, next)
-        }
-    }
-
+    // Метод отвечает за создание нового токена, продление жизни пользователя
     async check(req: ICustomRequest, res: Response, next: NextFunction): Promise<void> {
         const user = req.user as IJwtPayload;
         const userId = user.id;
@@ -99,22 +99,21 @@ class UserController {
 
     async findOne(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            if (!req.params) {
-                throw Error("userController-findOne: не найдено параметров")
-            }
-            if (!req.params.id) {
+            const id: string | undefined = typeof req.query.id === 'string' ? req.query.id : undefined;   
+        
+            if (!id) {
                 throw Error("userController-findOne: не найден параметр id")
             }
 
-            const user = await dataSource.getRepository(Users).findOneBy({ id: req.params.id })
+            const user: Users | null = await dataSource.getRepository(Users).findOneBy({ id: id })
             if (!user) throw new Error('пользователя с таким id нет в системе')
 
             res.json(user)
 
         } catch (error: unknown) {
-            processCatchError(error, next)
+            processApiError(404, error, next)
         }
     }
 }
 
-export default new UserController()
+export default new userController()
