@@ -2,10 +2,11 @@ import { NextFunction, Request, Response } from "express";
 import * as bcrypt from "bcrypt"
 import jwt from 'jsonwebtoken';
 
-import { Users } from "../entities/user.entity";
+import { User } from "../entities/user.entity";
 import { dataSource } from "../app-data-source";
 import processApiError from "../error/processApiError"
 import { ICustomRequest } from "../middlewares/authMiddleware";
+import { Favorite } from "../entities/favorites.entity";
 
 
 async function createToken(id: string, name: string, email: string, is_admin: boolean): Promise<string> {
@@ -47,14 +48,16 @@ class userController {
 
             const is_admin: boolean = req.body.is_admin || false
 
-            const is_exist = await dataSource.getRepository(Users).findOne({where: {email}})
+            const is_exist = await dataSource.getRepository(User).findOne({where: {email}})
             if (is_exist) throw new Error('Пользователь с таким email уже существует')
 
             const hashPassword: string = await bcrypt.hash(password, 5)
 
             const userObj: IUserEntity = {username, email, password: hashPassword, is_admin}
-            const user: Users = await dataSource.getRepository(Users).create(userObj)
-            await dataSource.getRepository(Users).save(user)
+            const user: User = await dataSource.getRepository(User).create(userObj)
+            await dataSource.getRepository(User).save(user)
+            const favorites: Favorite = await dataSource.getRepository(Favorite).create({ user })
+            await dataSource.getRepository(Favorite).save(favorites)
 
             const token: string = await createToken(user.id, user.username, user.email, user.is_admin)
             res.json(token)
@@ -70,7 +73,7 @@ class userController {
             const { email, password } = req.body
             if (!email || !password) throw new Error('Нужно заполнить все поля')
             // идентификация
-            const user = await dataSource.getRepository(Users).findOneBy({
+            const user = await dataSource.getRepository(User).findOneBy({
                 email: email
             })
             if (!user) throw new Error('Пользователя с таким email не существует')
@@ -105,7 +108,7 @@ class userController {
                 throw Error("userController-findOne: не найден параметр id")
             }
 
-            const user: Users | null = await dataSource.getRepository(Users).findOneBy({ id: id })
+            const user: User | null = await dataSource.getRepository(User).findOneBy({ id })
             if (!user) throw new Error('пользователя с таким id нет в системе')
 
             res.json(user)

@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express"
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 import { ICustomRequest } from "./authMiddleware";
+import { dataSource } from "../app-data-source";
+import { User } from "../entities/user.entity";
 
 export const check = (req: Request, res: Response, next: NextFunction) => {
     if (req.method === 'OPTIONS') next()

@@ -2,12 +2,13 @@ import { Entity,
         Column,
         PrimaryGeneratedColumn,
         ManyToOne,
-        JoinColumn
+        JoinColumn,
+        CreateDateColumn
     } from "typeorm"
-import { Journals } from "./journal.entity"
+import { Journal } from "./journal.entity"
 
 @Entity()
-export class Chapters {
+export class Chapter {
     @PrimaryGeneratedColumn()
     id: string
 
@@ -20,10 +21,10 @@ export class Chapters {
     @Column({type: "int"})
     serial_number: number
 
-    @Column({type: "int"})
-    year: number
-
-    @ManyToOne(() => Journals, (journal) => journal.chapters)  
+    @ManyToOne(() => Journal, (journal) => journal.chapters)
     @JoinColumn()
-    journal: Journals;
+    journal: Journal
+
+    @CreateDateColumn()
+    createdAt: Date
 }

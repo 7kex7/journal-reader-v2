@@ -3,10 +3,10 @@ import { Entity,
         PrimaryGeneratedColumn,
         OneToOne
     } from "typeorm"
-import { Favorites } from "./favorites.entity"
+import { Favorite } from "./favorites.entity"
 
 @Entity()
-export class Users {
+export class User {
     @PrimaryGeneratedColumn()
     id: string
 
@@ -25,7 +25,7 @@ export class Users {
     @Column({type: "varchar", length: 200, default: "default"})
     photo: string
 
-    @OneToOne(() => Favorites, (favorites) => favorites.user
+    @OneToOne(() => Favorite, (favorite) => favorite.user
                 , {onDelete: "CASCADE"})
-    favorites: Favorites
+    favorites: Favorite
 }

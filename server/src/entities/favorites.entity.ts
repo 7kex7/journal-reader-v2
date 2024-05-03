@@ -3,34 +3,23 @@ import { Entity,
         JoinColumn,
         OneToOne,
         OneToMany,
-        ManyToOne
+        ManyToOne,
+        ManyToMany,
+        JoinTable
     } from "typeorm"
-import { Users } from "./user.entity"
-import { Journals } from "./journal.entity"
+import { User } from "./user.entity"
+import { Journal } from "./journal.entity"
 
 @Entity()
-export class Favorites {
+export class Favorite {
     @PrimaryGeneratedColumn()
     id: string
 
-    @OneToOne(() => Users, (users) => users.favorites)
+    @OneToOne(() => User, (user) => user.favorites)
     @JoinColumn()
-    user: Users
+    user: User
 
-    @OneToMany(() => FavoriteJournals, (favoriteJournal) => favoriteJournal.favorites)
-    favoriteJournal: FavoriteJournals[]
-}
-
-@Entity()
-export class FavoriteJournals {
-    @PrimaryGeneratedColumn()
-    id: string
-    
-    @ManyToOne(() => Favorites, (favorites) => favorites.favoriteJournal)
-    @JoinColumn()
-    favorites: Favorites
-
-    @OneToOne(() => Journals)
-    @JoinColumn()
-    journal: Journals
+    @ManyToMany(() => Journal)
+    @JoinTable()
+    journals: Journal[]
 }

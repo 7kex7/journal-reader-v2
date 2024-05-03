@@ -1,10 +1,12 @@
-import express, { Express, urlencoded } from "express"
+import express, { Express } from "express"
 import { dataSource } from "./app-data-source"
 import router from './routes/router'
 import dotenv from "dotenv"
 import bodyParser from "body-parser"
 import fileUpload from "express-fileupload"
 import cors from "cors"
+import { User } from "./entities/user.entity"
+import { processDefaultError } from "./error/processApiError"
 
 const app: Express = express()
 dotenv.config()
@@ -20,28 +22,23 @@ app.use(fileUpload())
 // routes
 app.use('/api', router)
 
+
 async function start() {
-  try {
-    dataSource
-          .initialize()
-          .then(() => {
-              console.log("Data Source has been initialized!")
-          })
+    try {
+        await dataSource
+            .initialize()
+            .then(() => {
+                console.log("Data Source has been initialized!")
+            })
+        await dataSource.getRepository(User)
 
-    app.listen(port, () => {
-          console.log(`[server]: Server is running at http://localhost:${port}`);
-        });
+        app.listen(port, () => {
+            console.log(`[server]: Server is running at http://localhost:${port}`);
+            });
 
-        
-  } catch (error: unknown) {
-
-    if (typeof error === "string") {
-      console.log(error.toUpperCase())
-  
-    } else if (error instanceof Error) {
-      console.log(error.message)
+    } catch (error: unknown) {
+        processDefaultError(error)
     }
-  }
 }
 
 start()

@@ -3,11 +3,12 @@ import {
     Column,
     PrimaryGeneratedColumn,
     OneToMany,
+    ManyToMany,
 } from "typeorm"
-import { Journals } from "./journal.entity"
+import { Journal } from "./journal.entity"
 
 @Entity()
-export class Genres {
+export class Genre {
     @PrimaryGeneratedColumn()
     id: string
 

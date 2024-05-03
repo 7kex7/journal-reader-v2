@@ -1,13 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm"
-
-export enum JournalStatus {
-    NONE = "-",
-    IN_WORK = "in work",
-    FINISHED = "finished"
-}
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany } from "typeorm"
+import { Journal } from "./journal.entity"
 
 @Entity()
-export class Authors {
+export class Author {
     @PrimaryGeneratedColumn()
     id: string
 
