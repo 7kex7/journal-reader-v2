@@ -21,7 +21,7 @@ export class Chapter {
     @Column({type: "int"})
     serial_number: number
 
-    @ManyToOne(() => Journal, (journal) => journal.chapters)
+    @ManyToOne(() => Journal, (journal) => journal.chapters, {onDelete: "CASCADE"})
     @JoinColumn()
     journal: Journal
 

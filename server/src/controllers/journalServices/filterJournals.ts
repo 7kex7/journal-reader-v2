@@ -132,38 +132,41 @@ export async function handleFilterData(req: Request, res: Response, next: NextFu
         const rawGenres: string | undefined = req.body.genres
         const rawAuthors: string | undefined = req.body.authors
         const year: number | undefined = req.body.year
-
-        if (rawGenres && rawAuthors && year) { // genres & authors & year
-            res.json(
-                await service.getWithGenresAuthorsYear(rawGenres, rawAuthors, year)
-            )
-        } else if (rawGenres && rawAuthors && !year) { // genres & authors
-            res.json(
-                await service.getWithGenresAuthors(rawGenres, rawAuthors)
-            )
-        } else if (rawGenres && !rawAuthors && year) { // genres & year
-            res.json(
-                await service.getWithGenresYear(rawGenres, year)
-            )
-        } else if (!rawGenres && rawAuthors && year) { // authors & year
-            res.json(
-                await service.getWithAuthorsYear(rawAuthors, year)
-            )
-        } else if (rawGenres && !rawAuthors && !year) {  // genres
-            res.json(
-                await service.getWithGenres(rawGenres)
-            )
-        } else if (!rawGenres && rawAuthors && !year) { // authors
-            res.json(
-                await service.getWithAuthors(rawAuthors)
-            )
-        } else if (!rawGenres && !rawAuthors && year) { // year
-            res.json(
-                await service.getWithYear(year)
-            )
-        } else { // all (better use GET getAll)
-            res.json(await service.getAll())
+        
+        const upperYear: number | undefined = req.body.upperYear
+        const lowerYear: number | undefined = req.body.lowerYear
+        if (year && upperYear || year && lowerYear) {
+            throw new Error("укажите только один тип фильтрации по году: год ИЛИ годовой промежуток")
         }
+        
+        let response: Journal[];
+        if (rawGenres && rawAuthors && year) { // genres & authors & year
+            response = await service.getWithGenresAuthorsYear(rawGenres, rawAuthors, year);
+            
+        } else if (rawGenres && rawAuthors && !year) { // genres & authors
+            response = await service.getWithGenresAuthors(rawGenres, rawAuthors)
+        } else if (rawGenres && !rawAuthors && year) { // genres & year
+            response = await service.getWithGenresYear(rawGenres, year)
+        } else if (!rawGenres && rawAuthors && year) { // authors & year
+            response = await service.getWithAuthorsYear(rawAuthors, year)
+        } else if (rawGenres && !rawAuthors && !year) {  // genres
+            response = await service.getWithGenres(rawGenres)
+        } else if (!rawGenres && rawAuthors && !year) { // authors
+            response = await service.getWithAuthors(rawAuthors)
+        } else if (!rawGenres && !rawAuthors && year) { // year
+            response = await service.getWithYear(year)
+        } else { // all (better use GET getAll)
+            response = await service.getAll()
+        }
+
+        if (lowerYear) {
+            response.filter(j => j.year >= lowerYear)
+        }
+        if (upperYear) {
+            response.filter(j => j.year <= upperYear)
+        }
+
+        res.json(response)
 
     } catch (error: unknown) {
         processApiError(404, error, next)

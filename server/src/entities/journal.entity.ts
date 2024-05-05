@@ -34,12 +34,6 @@ export class Journal {
     @Column({type: "int", default: 0})
     number_of_chapters: number 
 
-    @CreateDateColumn()
-    createdAt: Date;
-
-    @UpdateDateColumn()
-    updatedAt: Date
-
     @ManyToMany(() => Genre)
     @JoinTable()
     genres: Genre[]
@@ -48,8 +42,12 @@ export class Journal {
     @JoinTable()
     authors: Author[];
 
-    @OneToMany(() => Chapter, (chapter) => chapter.journal, {
-        onDelete: "CASCADE" // delete chapters if journal is deleted
-    })
+    @OneToMany(() => Chapter, (chapter) => chapter.journal, {onDelete: "CASCADE"})
     chapters: Chapter[];
+
+    @CreateDateColumn()
+    createdAt: Date
+
+    @UpdateDateColumn()
+    updatedAt: Date
 }

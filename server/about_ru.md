@@ -1,21 +1,5 @@
 ## Описание запросов к серверу
 
-{
-  "email": "sec@mail.com",
-  "username": "second_user",
-  "password": "1234"
-}
-
-{
-  "title": "first title",
-  "description": "it is very first journal",
-  "year": 1984,
-  "status": "in work",
-  "genres": ["drama", "сёнен"],
-  "authors": ["7kex7"]
-}
-
-
 ### USER
 
 ##### Регистрация POST: host/api/users/registration
@@ -25,21 +9,21 @@
 <table class="tg">
 <thead>
   <tr>
-    <td class="tg-0pky" rowspan="4">req.body</td>
-    <td class="tg-0pky">email</td>
-    <td class="tg-0lax">string</td>
+    <td rowspan="4">req.body</td>
+    <td>email</td>
+    <td>string</td>
   </tr>
   <tr>
-    <td class="tg-0pky">username<br></td>
-    <td class="tg-0lax">string</td>
+    <td>username<br></td>
+    <td>string</td>
   </tr>
   <tr>
-    <td class="tg-0pky">password</td>
-    <td class="tg-0lax">string</td>
+    <td>password</td>
+    <td>string</td>
   </tr>
   <tr>
-    <td class="tg-0pky">? is_admin</td>
-    <td class="tg-0lax">boolean (false)</td>
+    <td>? is_admin</td>
+    <td>boolean (false)</td>
   </tr>
 </thead>
 </table>
@@ -49,12 +33,12 @@
 <table class="tg">
 <thead>
   <tr>
-    <td class="tg-0pky">jwt токен</td>
-    <td class="tg-0lax">string</td>
+    <td>jwt токен</td>
+    <td>string</td>
   </tr>
   <tr>
-    <td class="tg-0pky">ошибка</td>
-    <td class="tg-0pky">Error (server/src/error/apiError.ts)</td>
+    <td>ошибка</td>
+    <td>Error (server/src/error/apiError.ts)</td>
   </tr>
 </thead>
 </table>
@@ -68,13 +52,13 @@
 <table class="tg">
 <thead>
   <tr>
-    <td class="tg-0pky" rowspan="2">req.body</td>
-    <td class="tg-0pky">email</td>
-    <td class="tg-0lax">string</td>
+    <td rowspan="2">req.body</td>
+    <td>email</td>
+    <td>string</td>
   </tr>
   <tr>
-    <td class="tg-0pky">password</td>
-    <td class="tg-0lax">string</td>
+    <td>password</td>
+    <td>string</td>
   </tr>
 </thead>
 </table>
@@ -84,12 +68,12 @@
 <table class="tg">
 <thead>
   <tr>
-    <td class="tg-0pky">jwt токен</td>
-    <td class="tg-0lax">string</td>
+    <td>jwt токен</td>
+    <td>string</td>
   </tr>
   <tr>
-    <td class="tg-0pky">ошибка</td>
-    <td class="tg-0pky">Error (server/src/error/apiError.ts)</td>
+    <td>ошибка</td>
+    <td>Error (server/src/error/apiError.ts)</td>
   </tr>
 </thead>
 </table>
@@ -103,13 +87,13 @@
 <table class="tg">
 <thead>
   <tr>
-    <td class="tg-0pky" rowspan="2">req.body</td>
-    <td class="tg-0pky">email</td>
-    <td class="tg-0lax">string</td>
+    <td rowspan="2">req.body</td>
+    <td>email</td>
+    <td>string</td>
   </tr>
   <tr>
-    <td class="tg-0pky">password</td>
-    <td class="tg-0lax">string</td>
+    <td>password</td>
+    <td>string</td>
   </tr>
 </thead>
 </table>
@@ -119,34 +103,34 @@
 <table class="tg">
 <thead>
   <tr>
-    <td class="tg-0pky" rowspan="6">user JSON</td>
-    <td class="tg-0pky">id</td>
-    <td class="tg-0lax">number</td>
+    <td rowspan="6">user JSON</td>
+    <td>id</td>
+    <td>number</td>
   </tr>
   <tr>
-    <td class="tg-0pky">is_admin</td>
-    <td class="tg-0lax">boolean</td>
+    <td>is_admin</td>
+    <td>boolean</td>
   </tr>
   <tr>
-    <td class="tg-0pky">username</td>
-    <td class="tg-0lax">string</td>
+    <td>username</td>
+    <td>string</td>
   </tr>
   <tr>
-    <td class="tg-0pky">email</td>
-    <td class="tg-0lax">string</td>
+    <td>email</td>
+    <td>string</td>
   </tr>
   <tr>
-    <td class="tg-0pky">password (хэш)</td>
-    <td class="tg-0lax">string</td>
+    <td>password (хэш)</td>
+    <td>string</td>
   </tr>
   <tr>
-    <td class="tg-0pky">photo</td>
-    <td class="tg-0lax">string</td>
+    <td>photo</td>
+    <td>string</td>
   </tr>
    <tr>
-    <td class="tg-0pky">ошибка</td>
-    <td class="tg-0pky"></td>
-    <td class="tg-0pky">Error (server/src/error/apiError.ts)</td>
+    <td>ошибка</td>
+    <td></td>
+    <td>Error (server/src/error/apiError.ts)</td>
   </tr>
 </thead>
 </table>
@@ -162,33 +146,65 @@
 <table class="tg">
 <thead>
   <tr>
-    <td class="tg-0pky" rowspan="7">req.body</td>
-    <td class="tg-0pky">title</td>
-    <td class="tg-0lax">string</td>
+    <td rowspan="8">req.body</td>
+    <td>title</td>
+    <td>string</td>
   </tr>
   <tr>
-    <td class="tg-0pky">status</td>
-    <td class="tg-0lax">string</td>
+    <td>status</td>
+    <td>string</td>
   </tr>
   <tr>
-    <td class="tg-0pky">description</td>
-    <td class="tg-0lax">string</td>
+    <td>description</td>
+    <td>string</td>
   </tr>
   <tr>
-    <td class="tg-0pky">year</td>
-    <td class="tg-0lax">number</td>
+    <td>year</td>
+    <td>number</td>
   </tr>
   <tr>
-    <td class="tg-0pky">coverImg</td>
-    <td class="tg-0lax">file</td>
+    <td>coverImg</td>
+    <td>file</td>
+  </tr>
+</thead>
+</table>
+
+* Возвращаемые данные:
+
+<table class="tg">
+<thead>
+  <tr>
+    <td rowspan="8">req.body</td>
+    <td>title</td>
+    <td>string</td>
   </tr>
   <tr>
-    <td class="tg-0pky">? genres</td>
-    <td class="tg-0lax">string[ ]</td>
+    <td>status</td>
+    <td>string</td>
   </tr>
   <tr>
-    <td class="tg-0pky">? authors</td>
-    <td class="tg-0lax">string[ ]</td>
+    <td>description</td>
+    <td>string</td>
+  </tr>
+  <tr>
+    <td>year</td>
+    <td>number</td>
+  </tr>
+  <tr>
+    <td>coverImg</td>
+    <td>file</td>
+  </tr>
+  <tr>
+    <td>? genres</td>
+    <td>string[ ]</td>
+  </tr>
+  <tr>
+    <td>? authors</td>
+    <td>string[ ]</td>
+  </tr>
+  <tr>
+    <td>? chapters</td>
+    <td>string[ ]</td>
   </tr>
 </thead>
 </table>

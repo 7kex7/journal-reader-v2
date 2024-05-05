@@ -4,7 +4,7 @@ import { dataSource } from "../../app-data-source"
 import fileUpload from "express-fileupload"
 import * as fs from "fs"
 import * as path from "path"
-import { CustomFileType } from "../../domain/customTypes"
+import { CustomFileType } from "../../domain"
 
 
 export async function processGenres(genres: string): Promise<Genre[]> {
@@ -49,6 +49,7 @@ export async function processAuthors(authors: string): Promise<Author[]> {
 }
 
 export async function makeFolder(title: string, coverImg: CustomFileType): Promise<void> {
+    // создание папки
     const folderName: string = title.replace(/\s/g, '_')
     const pathToPublic: string = path.join(__dirname, "..", "..", "..", "public")
     if (!fs.existsSync(pathToPublic)) {
@@ -60,11 +61,12 @@ export async function makeFolder(title: string, coverImg: CustomFileType): Promi
     }
     fs.mkdirSync(folderPath)
 
+    // перемещение обложки журнала
     if (coverImg) {
         if (Array.isArray(coverImg)) {
             throw new Error("загрузите только 1 файл")
         }
-        coverImg.mv(path.join(folderPath, "cover.jpeg"))
+        coverImg.mv(path.join(folderPath, "cover.jpg"))
     } else {
         throw new Error("загрузите обложку")
     }

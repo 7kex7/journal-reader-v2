@@ -9,7 +9,7 @@ journalRouter.get("/", journalController.getAll)
 journalRouter.post("/filter", journalController.getFilterData)
 
 journalRouter.post("/create", check, journalController.create)
-journalRouter.post("/delete", check, journalController.destroy)
+journalRouter.post("/delete", check, journalController.delete)
 
 journalRouter.post("/add_genre", check, journalController.addGenre)
 journalRouter.post("/remove_genre", check, journalController.removeGenre)

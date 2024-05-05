@@ -12,7 +12,7 @@ import { makeFolder, processGenres, processAuthors }
 import { handleAddAuthor, handleAddGenre, 
         handleRemoveAuthor, handleRemoveGenre } 
         from "./journalServices/editGenresAuthors"
-import { CustomFileType } from "../domain/customTypes"
+import { CustomFileType } from "../domain"
 
 
 class journalController {
@@ -36,7 +36,7 @@ class journalController {
             journal.description = description
             journal.status = status
             journal.year = year
-            
+
             // Жанры, как и авторы, будут приходить 
             // в формате json {genres: '["жанр 1", "жанр 2"]', ...}
             let genres: string | undefined = req.body.genres
@@ -58,18 +58,21 @@ class journalController {
         }
     }
 
-    async destroy(req: Request, res: Response, next: NextFunction) : Promise<void> {
-        try {
-            const id: string = req.body.id
+    async delete(req: Request, res: Response, next: NextFunction) : Promise<void> {
+        try { // journalId
+            const journalId: string = req.body.journalId
             const journal: Journal | null = await dataSource.getRepository(Journal)
-                                        .findOne({where: {id}})
-            if (!journal) throw new Error('манги с таким id не существует')
-            const fname: string = journal.title.replace(/\s/g, '_')
+                                        .findOne({where: {id: journalId}})
+            if (!journal) throw new Error('журнала с таким id не существует')
+            const journalFolderName: string = journal.title.replace(/\s/g, '_')
 
             // удаление файлов
-            fs.rmSync(path.join(__dirname, '..', '..', 'public', fname), 
-                                { recursive: true, force: true })
-            await dataSource.getRepository(Journal).delete({ id })
+            const pathToJournal: string = path.join(__dirname, '..', '..', 'public', journalFolderName)
+            fs.rmSync(pathToJournal, { recursive: true, force: true })
+            if (fs.existsSync(pathToJournal)) {
+                throw new Error("ошибка в удалении папки")
+            }
+            await dataSource.getRepository(Journal).delete({ id: journalId })
 
             res.json({message: 'deleted successfully'})
 
@@ -81,10 +84,10 @@ class journalController {
 
     async getOne(req: Request, res: Response, next: NextFunction) : Promise<void> {
         try {
-            const id: string = req.params.id
+            const journalId: string = req.params.journalId
             const journal: Journal | null = await dataSource.getRepository(Journal)
                                     .findOne({
-                                            where: {id: id},
+                                            where: {id: journalId},
                                             relations: {genres: true, authors: true, chapters: true}
                                     })
             if (!journal) throw new Error('журнал не найден')
