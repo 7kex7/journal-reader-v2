@@ -14,7 +14,7 @@ root.render(
     <Context.Provider value={
       {
         user: new userStore(),
-        manga: new mangaStore()
+        journal: new journalStore()
       }
     }>
     </Context.Provider>
